@@ -4,12 +4,27 @@ import { RevenueChip } from "@/components/revenue-chip";
 import { SatelliteMap } from "@/components/satellite-map";
 import { HUBS } from "@/data/hubs";
 import { useOpsStore } from "@/store/ops";
+import { savePlayerUsername } from "@/lib/game-state";
 
 export const Route = createFileRoute("/")({ component: Home });
 
 function Home() {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState<"all" | "europe" | "russia" | "china">("all");
+  const [username, setUsername] = useState("");
+  const [savedUsername, setSavedUsername] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+
+  const submitUsername = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setUsernameError("");
+    try {
+      const result = await savePlayerUsername({ data: username });
+      setSavedUsername(result.username);
+    } catch (error) {
+      setUsernameError(error instanceof Error ? error.message : "Unable to save username.");
+    }
+  };
   const lanes = useOpsStore((state) => state.lanes);
   const originId = useOpsStore((state) => state.originId);
   const routing = useOpsStore((state) => state.routing);
@@ -35,6 +50,12 @@ function Home() {
         <span className="ops-brand__mark">M</span>
         <span><strong>MERIDIAN</strong><small>LOGISTICS MANAGER</small></span>
       </header>
+      <form className="player-identity" onSubmit={submitUsername} aria-label="Player identity">
+        <label htmlFor="player-username">PLAYER</label>
+        <input id="player-username" value={username} onChange={(event) => setUsername(event.target.value)} placeholder="username" maxLength={24} />
+        <button type="submit">{savedUsername || "SAVE"}</button>
+        {usernameError ? <small role="alert">{usernameError}</small> : null}
+      </form>
       <aside className="dispatch-panel" aria-label="Dispatch controls">
         <div className="dispatch-panel__eyebrow">NETWORK CONTROL / 01</div>
         <h2>Build your freight network</h2>
