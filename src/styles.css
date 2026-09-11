@@ -127,6 +127,67 @@
   color: var(--color-fg);
 }
 
+.ops-brand {
+  position: fixed;
+  z-index: 3;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  letter-spacing: .08em;
+}
+.ops-brand__mark { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--color-fg); border-radius: 50%; font-size: 13px; }
+.ops-brand strong, .ops-brand small { display: block; line-height: 1.1; }
+.ops-brand strong { font-size: 12px; }
+.ops-brand small { color: var(--color-muted); font-size: 8px; letter-spacing: .16em; margin-top: 3px; }
+.dispatch-panel {
+  position: fixed;
+  z-index: 2;
+  top: 74px;
+  left: max(18px, env(safe-area-inset-left));
+  width: min(286px, calc(100vw - 36px));
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-hud);
+  background: color-mix(in oklab, var(--color-bg) 84%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 14px 36px #0008;
+}
+.dispatch-panel__eyebrow, .dispatch-panel__footer, .map-legend { font: 500 9px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted); }
+.dispatch-panel h2 { margin: 7px 0 5px; font-size: 18px; font-weight: 500; letter-spacing: -.02em; }
+.dispatch-panel__hint { margin: 0 0 14px; color: var(--color-muted); font-size: 11px; line-height: 1.45; }
+.city-search { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: 6px; color: var(--color-muted); }
+.city-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--color-fg); font: 12px var(--font-sans); }
+.city-search input::placeholder { color: var(--color-muted); }
+.region-tabs { display: flex; gap: 4px; margin: 11px 0; }
+.region-tabs button { border: 0; border-radius: 4px; padding: 5px 7px; background: transparent; color: var(--color-muted); font: 10px var(--font-mono); text-transform: capitalize; }
+.region-tabs button.is-active { background: var(--color-accent); color: var(--color-bg); }
+.city-list { display: grid; gap: 2px; max-height: 260px; overflow: auto; }
+.city-row { display: flex; align-items: center; gap: 9px; width: 100%; padding: 7px 6px; border: 0; border-radius: 5px; background: transparent; color: var(--color-fg); text-align: left; }
+.city-row:hover, .city-row:focus-visible { background: color-mix(in oklab, var(--color-fg) 10%, transparent); outline: 0; }
+.city-row > span:nth-child(2) { flex: 1; min-width: 0; }
+.city-row strong, .city-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.city-row strong { font-size: 12px; font-weight: 500; }
+.city-row small { margin-top: 2px; color: var(--color-muted); font: 9px var(--font-mono); text-transform: capitalize; }
+.city-dot, .legend-dot { flex: 0 0 auto; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+.city-dot--europe, .legend-dot--europe { background: #d7ddd4; }
+.city-dot--russia, .legend-dot--russia { background: #9da99c; }
+.city-dot--china, .legend-dot--china { background: #687667; }
+.city-arrow { color: var(--color-muted); font-size: 14px; }
+.dispatch-panel__footer { display: flex; justify-content: space-between; margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--color-border); font-size: 8px; }
+.is-live { color: var(--color-accent); }
+.map-legend { position: fixed; z-index: 2; right: 18px; bottom: max(18px, env(safe-area-inset-bottom)); display: flex; gap: 12px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: 6px; background: #0a0a0bcc; }
+.map-legend span { display: flex; align-items: center; gap: 5px; }
+
+@media (max-width: 480px) {
+  .dispatch-panel { top: 68px; width: min(260px, calc(100vw - 36px)); padding: 13px; }
+  .city-list { max-height: 195px; }
+  .map-legend { right: 10px; bottom: 10px; gap: 7px; font-size: 7px; }
+}
+
 @media (max-width: 480px) {
   .revenue-chip {
     padding: 6px 10px;

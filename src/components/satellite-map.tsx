@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as maplibregl from "maplibre-gl";
 import { HUB_BY_ID, HUBS, hubsToGeoJSON } from "@/data/hubs";
-import { quoteLane } from "@/lib/freight";
+import { laneDemand, quoteLane, routeEtaMinutes } from "@/lib/freight";
 import { fetchRoadRoute, pairKey } from "@/lib/routing";
 import { useOpsStore, type Lane } from "@/store/ops";
 import type { GeoJSONSource, Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
@@ -326,14 +326,18 @@ export function SatelliteMap() {
       try {
         const route = await fetchRoadRoute(from, to);
         if (disposed) return;
+        const demand = laneDemand(route.km, from.region === "europe" ? 2 : 1, to.region === "china" ? 2 : 1);
+        const facilityBonus = from.region === to.region ? 4 : 0;
         const lane: Lane = {
           id: `${from.id}__${to.id}__${Date.now()}`,
           fromId: from.id,
           toId: to.id,
           coordinates: route.coordinates,
           km: route.km,
-          quote: quoteLane(route.km),
+          quote: quoteLane(route.km, demand, route.onRoad ? 1.08 : 0.94),
           onRoad: route.onRoad,
+          demand,
+          etaMinutes: routeEtaMinutes(route.km, demand, facilityBonus),
         };
         useOpsStore.getState().addLane(lane);
         fitLane(lane);
