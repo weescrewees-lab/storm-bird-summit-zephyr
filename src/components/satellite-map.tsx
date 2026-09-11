@@ -99,15 +99,7 @@ const STYLE: StyleSpecification = {
         "line-color": "#e8ece8",
         "line-width": 2.05,
         "line-opacity": 0.96,
-        "line-gradient": [
-          "interpolate",
-          ["linear"],
-          ["line-progress"],
-          0,
-          "#c5ccc4",
-          1,
-          "#f3f6f2",
-        ],
+        "line-gradient": ["interpolate", ["linear"], ["line-progress"], 0, "#c5ccc4", 1, "#f3f6f2"],
       },
     },
     {
@@ -330,19 +322,26 @@ export function SatelliteMap() {
       if (!from || !to) return;
       ops.setPending(id, true);
       clearPreview();
-      const route = await fetchRoadRoute(from, to);
-      if (disposed) return;
-      const lane: Lane = {
-        id: `${from.id}__${to.id}__${Date.now()}`,
-        fromId: from.id,
-        toId: to.id,
-        coordinates: route.coordinates,
-        km: route.km,
-        quote: quoteLane(route.km),
-        onRoad: route.onRoad,
-      };
-      useOpsStore.getState().addLane(lane);
-      fitLane(lane);
+
+      try {
+        const route = await fetchRoadRoute(from, to);
+        if (disposed) return;
+        const lane: Lane = {
+          id: `${from.id}__${to.id}__${Date.now()}`,
+          fromId: from.id,
+          toId: to.id,
+          coordinates: route.coordinates,
+          km: route.km,
+          quote: quoteLane(route.km),
+          onRoad: route.onRoad,
+        };
+        useOpsStore.getState().addLane(lane);
+        fitLane(lane);
+      } catch {
+        useOpsStore.getState().setPending(null, false);
+        useOpsStore.getState().setOrigin(null);
+        clearPreview();
+      }
     };
 
     const map = new maplibregl.Map({
@@ -367,10 +366,7 @@ export function SatelliteMap() {
       pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
     });
 
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      "bottom-left",
-    );
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
     map.touchZoomRotate.disableRotation();
 
     const canvas = map.getCanvas();
@@ -397,8 +393,7 @@ export function SatelliteMap() {
       const hits = map.queryRenderedFeatures(event.point, {
         layers: ["hubs-hit"],
       });
-      const nextIndex =
-        typeof hits[0]?.id === "number" ? hits[0].id : undefined;
+      const nextIndex = typeof hits[0]?.id === "number" ? hits[0].id : undefined;
       const waiting = Boolean(useOpsStore.getState().originId);
       canvas.style.cursor = nextIndex != null ? "pointer" : waiting ? "crosshair" : "";
       if (nextIndex !== hoverIndex) {
@@ -439,9 +434,7 @@ export function SatelliteMap() {
     };
     window.addEventListener("keydown", onKey);
 
-    (window as Window & { __selectHub?: (id: string) => void }).__selectHub = (
-      id: string,
-    ) => {
+    (window as Window & { __selectHub?: (id: string) => void }).__selectHub = (id: string) => {
       void handleHub(id);
     };
 

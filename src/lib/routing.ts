@@ -37,8 +37,7 @@ function corridorVias(from: Hub, to: Hub): LngLat[] {
   let corridor: LngLat[] = [];
 
   if (regions.has("europe") && regions.has("china")) {
-    corridor =
-      destChina && destChina.lat >= 38 && destChina.lng >= 110 ? SIBERIA : SILK;
+    corridor = destChina && destChina.lat >= 38 && destChina.lng >= 110 ? SIBERIA : SILK;
   } else if (regions.has("europe") && regions.has("russia")) {
     if (haversineKm(from, to) < 1800) return [];
     corridor = [SIBERIA[0]!, SIBERIA[1]!];
@@ -93,7 +92,7 @@ async function osrmRoute(points: LngLat[], signal: AbortSignal): Promise<RoadRou
 
 export async function fetchRoadRoute(from: Hub, to: Hub): Promise<RoadRoute> {
   const controller = new AbortController();
-  const timer = window.setTimeout(() => controller.abort(), 18000);
+  const timer = window.setTimeout(() => controller.abort(), 9000);
   const vias = corridorVias(from, to);
   const direct = [from, to];
   const withVias = [from, ...vias, to];
