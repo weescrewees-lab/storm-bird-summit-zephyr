@@ -57,7 +57,7 @@ function Home() {
           {filteredHubs.map((hub) => (
             <button className="city-row" key={hub.id} onClick={() => selectHub(hub.id)} disabled={routing}>
               <span className={`city-dot city-dot--${hub.region}`} />
-              <span><strong>{hub.name}</strong><small>{hub.region} / {hub.lat.toFixed(2)}°N</small></span>
+              <span><strong>{hub.name}</strong><small>{hub.region} / {hub.lat.toFixed(2)}°N / cargo hub</small></span>
               <span className="city-arrow">→</span>
             </button>
           ))}

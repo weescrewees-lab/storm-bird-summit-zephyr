@@ -11,6 +11,8 @@ export type Lane = {
   km: number;
   quote: number;
   onRoad: boolean;
+  etaMinutes?: number;
+  demand?: number;
 };
 
 type OpsState = {
