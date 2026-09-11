@@ -1,0 +1,144 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@theme {
+  --color-bg: #0a0a0b;
+  --color-surface: #121214;
+  --color-fg: #e8ece8;
+  --color-muted: #8a9188;
+  --color-accent: #c9d0c8;
+  --color-border: color-mix(in oklab, var(--color-fg) 14%, transparent);
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius-hud: 10px;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  #app {
+    height: 100%;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.map-stage {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+}
+
+.map-stage .maplibregl-map,
+.map-stage .maplibregl-canvas,
+.map-stage .maplibregl-canvas-container {
+  width: 100%;
+  height: 100%;
+}
+
+.map-stage .maplibregl-ctrl-bottom-right,
+.map-stage .maplibregl-ctrl-top-right,
+.map-stage .maplibregl-ctrl-top-left {
+  display: none;
+}
+
+.map-stage .maplibregl-ctrl-bottom-left {
+  left: 8px;
+  bottom: 8px;
+}
+
+.map-stage .maplibregl-ctrl-attrib {
+  background: transparent;
+  color: color-mix(in oklab, var(--color-fg) 45%, transparent);
+  font-size: 9px;
+  line-height: 1.3;
+  padding: 0;
+}
+
+.map-stage .maplibregl-ctrl-attrib a {
+  color: inherit;
+}
+
+.map-stage .maplibregl-ctrl-attrib-inner {
+  background: transparent;
+}
+
+.map-stage .maplibregl-ctrl-logo {
+  display: none;
+}
+
+.revenue-chip {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: var(--radius-hud);
+  background: color-mix(in oklab, var(--color-bg) 78%, transparent);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
+}
+
+.revenue-chip__label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  line-height: 1;
+}
+
+.revenue-chip__amount {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg);
+}
+
+@media (max-width: 480px) {
+  .revenue-chip {
+    padding: 6px 10px;
+  }
+
+  .revenue-chip__amount {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revenue-chip__amount {
+    transition: none;
+  }
+}
