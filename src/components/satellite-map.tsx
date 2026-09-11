@@ -228,11 +228,7 @@ export function SatelliteMap() {
     if (!root) return;
 
     let disposed = false;
-    let map: MapLibreMap | undefined;
     let hoverIndex: number | undefined;
-    let resizeObserver: ResizeObserver | undefined;
-    let unsub: (() => void) | undefined;
-    let onKey: ((event: KeyboardEvent) => void) | undefined;
     const marked = new Set<number>();
 
     const clearPreview = () => {
@@ -349,7 +345,7 @@ export function SatelliteMap() {
       fitLane(lane);
     };
 
-    map = new maplibregl.Map({
+    const map = new maplibregl.Map({
       container: root,
       style: STYLE,
       center: [75, 48.2],
@@ -435,7 +431,7 @@ export function SatelliteMap() {
       syncState();
     });
 
-    onKey = (event: KeyboardEvent) => {
+    const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         useOpsStore.getState().setOrigin(null);
         clearPreview();
@@ -449,12 +445,12 @@ export function SatelliteMap() {
       void handleHub(id);
     };
 
-    unsub = useOpsStore.subscribe(() => {
+    const unsub = useOpsStore.subscribe(() => {
       syncState();
       if (!useOpsStore.getState().originId) clearPreview();
     });
 
-    resizeObserver = new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       map?.resize();
     });
     resizeObserver.observe(root);

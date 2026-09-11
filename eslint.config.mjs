@@ -15,6 +15,8 @@ export default tseslint.config(
       ".nitro/**",
       "node_modules/**",
       "src/routeTree.gen.ts",
+      "public/maplibre-gl-shared.mjs",
+      "public/maplibre-gl-worker.mjs",
     ],
   },
   js.configs.recommended,
